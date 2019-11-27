@@ -1,0 +1,24 @@
+{
+  "name": "cache-database",
+  "version": "1.0.10",
+  "description": "cache database",
+  "main": "index.js",
+  "directories": {
+    "src": "src",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polozov-nikita/cache-database.git"
+  },
+  "keywords": [
+    "cache",
+    "db"
+  ],
+  "author": "Polozov Nikita",
+  "license": "ISC",
+  "homepage": "https://github.com/polozov-nikita/cache-database"
+}
