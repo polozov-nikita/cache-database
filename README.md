@@ -1,17 +1,41 @@
 # cache-database
 
-# Connection
+## Connection
 
-# Create collection
+const cache = require('cache-database');
 
-# Find documents collection
+## Collections
 
-# Search documents collection
+### Create
 
-# Find One document collection
+const collection = cache.create('collection');
 
-# Create document collection
+## Documents
 
-# Update documents collection
+### Create
 
-# Delete documents collection
+collection.create({a: 1, b: 2, c: 3});
+
+### Find all
+
+collection.find().exec();
+
+### Find params
+
+collection.find({a: 1}).exec();
+
+### Search
+
+collection.search('test').exec();
+
+### Find One
+
+collection.findOne({a: 1}).exec();
+
+### Update
+
+collection.findAndUpdate({a: 1}, {x: 10});
+
+### Delete
+
+collection.findAndDelete({a: 1});
