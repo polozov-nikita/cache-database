@@ -43,13 +43,21 @@ module.exports = (collection, searchKeys, isUpdate = false) => {
             };
           };
           if (check) {
-            searchDocs.push(documents[i]);
+            if (!isUpdate) {
+              searchDocs.push(Object.assign({}, collection.documents[documents[i]]));
+            } else {
+              searchDocs.push(documents[i]);
+            };
           };
         };
         return searchDocs;
       } else {
         for (let i = 0, lengthDocuments = documents.length; i < lengthDocuments; i++) {
-          searchDocs.push(documents[i]);
+          if (!isUpdate) {
+            searchDocs.push(Object.assign({}, collection.documents[documents[i]]));
+          } else {
+            searchDocs.push(documents[i]);
+          };
         };
         return searchDocs;
       };
@@ -57,6 +65,10 @@ module.exports = (collection, searchKeys, isUpdate = false) => {
       return [];
     };
   } else {
-    return !isUpdate ? collection.documents.filter(item => item !== null) : [];
+    return !isUpdate
+      ? collection.documents
+        .filter(item => item !== null)
+        .map(item => Object.assign({}, item))
+      : [];
   };
 };

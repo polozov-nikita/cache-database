@@ -5,7 +5,7 @@ let limitRecord = null;
 
 //final function
 const exec = (collection, data, searchKeys, skipKeys, finding = true) => {
-  let documents = finding ? functions.find(collection, searchKeys).map(item => Object.assign({}, item)) : data;
+  let documents = finding ? functions.find(collection, searchKeys) : data;
   //skip records
   if (skipRecord) {
     if (skipRecord <= documents.length) {
@@ -35,7 +35,7 @@ const exec = (collection, data, searchKeys, skipKeys, finding = true) => {
 
 //sorting documents
 const sort = (collection, sortKeys, searchKeys, skipKeys) => {
-  const documents = functions.find(collection, searchKeys).map(item => Object.assign({}, item));
+  const documents = functions.find(collection, searchKeys);
   //return
   return {
     exec: () => exec(

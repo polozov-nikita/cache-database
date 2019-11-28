@@ -34,7 +34,7 @@ const find = (documents, search) => {
 const exec = (collection, data, search, searchKeys, skipKeys, finding = true) => {
   let documents;
   if (finding) {
-    documents = functions.find(collection, searchKeys).map(item => Object.assign({}, item));
+    documents = functions.find(collection, searchKeys);
     documents = find(documents, search);
   } else {
     documents = data;
@@ -69,7 +69,7 @@ const exec = (collection, data, search, searchKeys, skipKeys, finding = true) =>
 
 //sorting documents
 const sort = (collection, sortKeys, search, searchKeys, skipKeys) => {
-  let documents = functions.find(collection, searchKeys).map(item => Object.assign({}, item));
+  let documents = functions.find(collection, searchKeys);
   documents = find(documents, search);
   //return
   return {

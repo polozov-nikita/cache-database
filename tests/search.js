@@ -8,3 +8,5 @@ for (let i = 0; i < 20; i++) {
 
 const t1 = collection.search(100).exec();
 console.log(`find 100. OTPUT -> ${JSON.stringify(t1)} | Test -> ${JSON.stringify(t1) === '[]'}`);
+
+console.log(collection.search(1).exec());
