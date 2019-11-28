@@ -30,76 +30,11 @@ const find = (documents, search) => {
   return documents.filter(item => convert(item).includes(search));
 };
 
-//filter documents
-const filter = (collection, searchKeys) => {
-  if (searchKeys.length) {
-    let documents = null;
-    let interruptLabel = false;
-    for (let search = 0, lengthSearch = searchKeys.length; search < lengthSearch; search++) {
-      const range = collection.indexes[searchKeys[search].key].filter(item => collection.documents[item] ? functions.getValueFromObj(collection.documents[item], searchKeys[search].key) == searchKeys[search].value : false);
-      if (range.length) {
-        if (!documents || range.length < documents.length) {
-          documents = range;
-        };
-      } else {
-        interruptLabel = true;
-        documents = [];
-        break;
-      };
-    };
-    if (!interruptLabel) {
-      const searchDocs = [];
-      if (searchKeys.length > 1) {
-        for (let i = 0, lengthDocuments = documents.length; i < lengthDocuments; i++) {
-          let check = true;
-          for (let search = 0, lengthSearch = searchKeys.length; search < lengthSearch; search++) {
-            if (functions.getValueFromObj(collection.documents[documents[i]], searchKeys[search].key) !== searchKeys[search].value) {
-              check = false;
-              break;
-            };
-          };
-          if (check) {
-            searchDocs.push(Object.assign({}, collection.documents[documents[i]]));
-          };
-        };
-        return searchDocs;
-      } else {
-        for (let i = 0, lengthDocuments = documents.length; i < lengthDocuments; i++) {
-          searchDocs.push(Object.assign({}, collection.documents[documents[i]]));
-        };
-        return searchDocs;
-      };
-    } else {
-      return [];
-    };
-  } else {
-    const data = collection.documents.filter(item => item !== null);
-    return data.map(item => Object.assign({}, item));
-  };
-};
-
-//sorting documents
-const sort = (collection, sortKeys, search, searchKeys, skipKeys) => {
-  let documents = filter(collection, searchKeys);
-  documents = find(documents, search);
-  //return
-  return {
-    exec: () => exec(
-      collection,
-      functions.sortingDocuments(documents, sortKeys),
-      search,
-      searchKeys,
-      skipKeys,
-      false,
-    ),
-  };
-};
-
 //final function
 const exec = (collection, data, search, searchKeys, skipKeys, finding = true) => {
   let documents;
   if (finding) {
-    documents = filter(collection, searchKeys);
+    documents = functions.find(collection, searchKeys).map(item => Object.assign({}, item));
     documents = find(documents, search);
   } else {
     documents = data;
@@ -129,6 +64,23 @@ const exec = (collection, data, search, searchKeys, skipKeys, finding = true) =>
     return documents;
   } else {
     return documents;
+  };
+};
+
+//sorting documents
+const sort = (collection, sortKeys, search, searchKeys, skipKeys) => {
+  let documents = functions.find(collection, searchKeys).map(item => Object.assign({}, item));
+  documents = find(documents, search);
+  //return
+  return {
+    exec: () => exec(
+      collection,
+      functions.sortingDocuments(documents, sortKeys),
+      search,
+      searchKeys,
+      skipKeys,
+      false,
+    ),
   };
 };
 

@@ -1,67 +1,21 @@
 const functions = require('../../functions');
 
-//filters records
-const filter = (collection, key, search) => collection.indexes[key].filter(item => collection.documents[item] ? functions.getValueFromObj(collection.documents[item], key) == search : false);
-
-//find documents
-const find = (collection, searchKeys) => {
-  if (searchKeys.length) {
-    let documents = null;
-    let interruptLabel = false;
-    for (let search = 0, lengthSearch = searchKeys.length; search < lengthSearch; search++) {
-      const range = filter(collection, searchKeys[search].key, searchKeys[search].value);
-      if (range.length) {
-        if (!documents || range.length < documents.length) {
-          documents = range;
-        };
-      } else {
-        interruptLabel = true;
-        documents = [];
-        break;
-      };
-    };
-    if (!interruptLabel) {
-      const searchDocs = [];
-      if (searchKeys.length > 1) {
-        for (let i = 0, lengthDocuments = documents.length; i < lengthDocuments; i++) {
-          let check = true;
-          for (let search = 0, lengthSearch = searchKeys.length; search < lengthSearch; search++) {
-            if (functions.getValueFromObj(collection.documents[documents[i]], searchKeys[search].key) !== searchKeys[search].value) {
-              check = false;
-              break;
-            };
-          };
-          if (check) {
-            searchDocs.push(collection.documents[documents[i]]);
-          };
-        };
-        return searchDocs;
-      } else {
-        for (let i = 0, lengthDocuments = documents.length; i < lengthDocuments; i++) {
-          searchDocs.push(collection.documents[documents[i]]);
-        };
-        return searchDocs;
-      };
-    } else {
-      return [];
-    };
-  } else {
-    return collection.documents.filter(item => item !== null);
-  };
-};
-
 //final function
 const exec = (collection, searchKeys, skipKeys) => {
-  const documents = find(collection, searchKeys);
-  const document = documents.length ? documents[0] : null;
+  const documents = functions.find(collection, searchKeys);
+  const document = documents.length ? Object.assign({}, collection.documents(documents[0])) : null;
   //skip keys
-  if (skipKeys.length && document) {
-    for (let skip = 0, lengthSkip = skipKeys.length; skip < lengthSkip; skip++) {
-      delete document[skipKeys[skip]];
+  if (document) {
+    if (skipKeys.length) {
+      for (let skip = 0, lengthSkip = skipKeys.length; skip < lengthSkip; skip++) {
+        delete document[skipKeys[skip]];
+      };
+      return document;
+    } else {
+      return document;
     };
-    return Object.assign({}, document);
   } else {
-    return Object.assign({}, document);
+    return null;
   };
 };
 

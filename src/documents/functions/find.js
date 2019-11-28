@@ -3,60 +3,9 @@ const functions = require('../../functions');
 let skipRecord = null;
 let limitRecord = null;
 
-//filters records
-const filter = (collection, key, search) => collection.indexes[key].filter(item => collection.documents[item] ? functions.getValueFromObj(collection.documents[item], key) == search : false);
-
-//find documents
-const find = (collection, searchKeys) => {
-  if (searchKeys.length) {
-    let documents = null;
-    let interruptLabel = false;
-    for (let search = 0, lengthSearch = searchKeys.length; search < lengthSearch; search++) {
-      const range = filter(collection, searchKeys[search].key, searchKeys[search].value);
-      if (range.length) {
-        if (!documents || range.length < documents.length) {
-          documents = range;
-        };
-      } else {
-        interruptLabel = true;
-        documents = [];
-        break;
-      };
-    };
-    if (!interruptLabel) {
-      const searchDocs = [];
-      if (searchKeys.length > 1) {
-        for (let i = 0, lengthDocuments = documents.length; i < lengthDocuments; i++) {
-          let check = true;
-          for (let search = 0, lengthSearch = searchKeys.length; search < lengthSearch; search++) {
-            if (functions.getValueFromObj(collection.documents[documents[i]], searchKeys[search].key) !== searchKeys[search].value) {
-              check = false;
-              break;
-            };
-          };
-          if (check) {
-            searchDocs.push(Object.assign({}, collection.documents[documents[i]]));
-          };
-        };
-        return searchDocs;
-      } else {
-        for (let i = 0, lengthDocuments = documents.length; i < lengthDocuments; i++) {
-          searchDocs.push(Object.assign({}, collection.documents[documents[i]]));
-        };
-        return searchDocs;
-      };
-    } else {
-      return [];
-    };
-  } else {
-    const data = collection.documents.filter(item => item !== null);
-    return data.map(item => Object.assign({}, item));
-  };
-};
-
 //final function
 const exec = (collection, data, searchKeys, skipKeys, finding = true) => {
-  let documents = finding ? find(collection, searchKeys) : data;
+  let documents = finding ? functions.find(collection, searchKeys).map(item => Object.assign({}, item)) : data;
   //skip records
   if (skipRecord) {
     if (skipRecord <= documents.length) {
@@ -86,7 +35,7 @@ const exec = (collection, data, searchKeys, skipKeys, finding = true) => {
 
 //sorting documents
 const sort = (collection, sortKeys, searchKeys, skipKeys) => {
-  const documents = find(collection, searchKeys);
+  const documents = functions.find(collection, searchKeys).map(item => Object.assign({}, item));
   //return
   return {
     exec: () => exec(
@@ -102,7 +51,6 @@ const sort = (collection, sortKeys, searchKeys, skipKeys) => {
 module.exports = (collection, search, skip, limit, pass) => {
   const searchKeys = [];
   const skipKeys = [];
-  let documents = collection.documents;
   //check param <search>
   if (search) {
     if (typeof(search) === 'object') {
@@ -202,7 +150,7 @@ module.exports = (collection, search, skip, limit, pass) => {
     },
     exec: () => exec(
       collection,
-      documents,
+      [],
       searchKeys,
       skipKeys,
       true,

@@ -1,58 +1,8 @@
 const functions = require('../../functions');
 
-//filters records
-const filter = (collection, key, search) => collection.indexes[key].filter(item => collection.documents[item] ? functions.getValueFromObj(collection.documents[item], key) == search : false);
-
-//find documents
-const find = (collection, searchKeys) => {
-  if (searchKeys.length) {
-    let documents = null;
-    let interruptLabel = false;
-    for (let search = 0, lengthSearch = searchKeys.length; search < lengthSearch; search++) {
-      const range = filter(collection, searchKeys[search].key, searchKeys[search].value);
-      if (range.length) {
-        if (!documents || range.length < documents.length) {
-          documents = range;
-        };
-      } else {
-        interruptLabel = true;
-        documents = [];
-        break;
-      };
-    };
-    if (!interruptLabel) {
-      const searchDocs = [];
-      if (searchKeys.length > 1) {
-        for (let i = 0, lengthDocuments = documents.length; i < lengthDocuments; i++) {
-          let check = true;
-          for (let search = 0, lengthSearch = searchKeys.length; search < lengthSearch; search++) {
-            if (functions.getValueFromObj(collection.documents[documents[i]], searchKeys[search].key) !== searchKeys[search].value) {
-              check = false;
-              break;
-            };
-          };
-          if (check) {
-            searchDocs.push(documents[i]);
-          };
-        };
-        return searchDocs;
-      } else {
-        for (let i = 0, lengthDocuments = documents.length; i < lengthDocuments; i++) {
-          searchDocs.push(documents[i]);
-        };
-        return searchDocs;
-      };
-    } else {
-      return [];
-    };
-  } else {
-    return [];
-  };
-};
-
 //final function
 const exec = (collection, searchKeys) => {
-  const documents = find(collection, searchKeys);
+  const documents = functions.find(collection, searchKeys);
   for (let i = 0, length = documents.length; i < length; i++) {
     //delete on collection
     collection.documents[documents[i]] = null;
