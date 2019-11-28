@@ -8,7 +8,13 @@ module.exports = (collection, key, search) => {
       if (search.$gte && value < search.$gte) {
         output = false;
       };
-      if (search.$lt && value > search.$lt) {
+      if (search.$gt && value <= search.$gt) {
+        output = false;
+      };
+      if (search.$lte && value > search.$lte) {
+        output = false;
+      };
+      if (search.$lt && value >= search.$lt) {
         output = false;
       };
       return output;

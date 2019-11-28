@@ -13,7 +13,7 @@ module.exports = (collection, searchKeys, isUpdate = false) => {
       if (typeSearchValue !== 'object') {
         range = filterValue(collection, searchKeys[search].key, searchKeys[search].value);
       } else {
-        if (searchKeys[search].value.hasOwnProperty('$gte') || searchKeys[search].value.hasOwnProperty('$lt')) {
+        if (searchKeys[search].value.hasOwnProperty('$gte') || searchKeys[search].value.hasOwnProperty('$lte') || searchKeys[search].value.hasOwnProperty('$gt') || searchKeys[search].value.hasOwnProperty('$lt')) {
           range = filterInterval(collection, searchKeys[search].key, searchKeys[search].value);
         } else if (searchKeys[search].value.hasOwnProperty('$in') && Array.isArray(searchKeys[search].value.$in)) {
           range = filterSample(collection, searchKeys[search].key, searchKeys[search].value);

@@ -10,6 +10,8 @@ console.log(collection.find().exec());
 
 console.log(collection.find({'a': 10}).exec());
 
-console.log(collection.find({a: {$gte: 3, $lt: 6}}).exec());
+console.log(collection.find({a: {$gte: 3, $lte: 6}}).exec());
+
+console.log(collection.find({a: {$gt: 3, $lt: 6}}).exec());
 
 console.log(collection.find({'c.a': {$in: [3,6]}}).exec());
