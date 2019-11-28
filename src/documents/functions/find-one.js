@@ -3,7 +3,7 @@ const functions = require('../../functions');
 //final function
 const exec = (collection, searchKeys, skipKeys) => {
   const documents = functions.find(collection, searchKeys);
-  const document = documents.length ? Object.assign({}, collection.documents(documents[0])) : null;
+  const document = documents.length ? Object.assign({}, collection.documents[documents[0]]) : null;
   //skip keys
   if (document) {
     if (skipKeys.length) {

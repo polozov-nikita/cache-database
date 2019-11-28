@@ -2,7 +2,7 @@ const functions = require('../../functions');
 
 //final function
 const exec = (collection, searchKeys, document) => {
-  const documents = functions.find(collection, searchKeys);
+  const documents = functions.find(collection, searchKeys, true);
   for (let i = 0, length = documents.length; i < length; i++) {
     const _document = {
       ...collection.documents[documents[i]],

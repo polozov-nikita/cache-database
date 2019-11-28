@@ -12,5 +12,3 @@ collection.findAndUpdate({a: 0}, {b: 'ya'});
 collection.findAndUpdate({a: 1}, {b: 'lala', c: 'lol'});
 collection.findAndUpdate({b: 'test'}, {b: 'test1'});
 console.log(collection.find().exec());
-console.log(collection.findOne({a: 0}));
-console.log(collection.findOne({a: 1}));

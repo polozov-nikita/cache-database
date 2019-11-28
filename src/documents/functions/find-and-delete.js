@@ -2,7 +2,7 @@ const functions = require('../../functions');
 
 //final function
 const exec = (collection, searchKeys) => {
-  const documents = functions.find(collection, searchKeys);
+  const documents = functions.find(collection, searchKeys, true);
   for (let i = 0, length = documents.length; i < length; i++) {
     //delete on collection
     collection.documents[documents[i]] = null;

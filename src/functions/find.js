@@ -3,7 +3,7 @@ const filterInterval = require('./filter-interval');
 const filterSample = require('./filter-sample');
 const getValueFromObj = require('./get-value-from-obj');
 
-module.exports = (collection, searchKeys) => {
+module.exports = (collection, searchKeys, isUpdate = false) => {
   if (searchKeys.length) {
     let documents = null;
     let interruptLabel = false;
@@ -57,6 +57,6 @@ module.exports = (collection, searchKeys) => {
       return [];
     };
   } else {
-    return [];
+    return !isUpdate ? collection.documents.filter(item => item !== null) : [];
   };
 };
