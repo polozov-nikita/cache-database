@@ -1,11 +1,9 @@
 const functions = require('../../functions');
 
-let skipRecord = null;
-let limitRecord = null;
-
 //final function
-const exec = (collection, data, searchKeys, skipKeys, finding = true) => {
-  let documents = finding ? functions.find(collection, searchKeys) : data;
+const exec = (collection, searchKeys, skipKeys, sortKeys, limitRecord, skipRecord) => {
+  let documents = functions.find(collection, searchKeys);
+  documents = functions.sortingDocuments(documents, sortKeys)
   //skip records
   if (skipRecord) {
     if (skipRecord <= documents.length) {
@@ -18,9 +16,6 @@ const exec = (collection, data, searchKeys, skipKeys, finding = true) => {
   if (limitRecord && documents.length > limitRecord) {
     documents = documents.slice(0, limitRecord);
   };
-  //refresh
-  skipRecord = null;
-  limitRecord = null;
   if (skipKeys.length) {
     for (let i = 0, lengthDocuments = documents.length; i < lengthDocuments; i++ ) {
       for (let skip = 0, lengthSkip = skipKeys.length; skip < lengthSkip; skip++) {
@@ -33,24 +28,10 @@ const exec = (collection, data, searchKeys, skipKeys, finding = true) => {
   };
 };
 
-//sorting documents
-const sort = (collection, sortKeys, searchKeys, skipKeys) => {
-  const documents = functions.find(collection, searchKeys);
-  //return
-  return {
-    exec: () => exec(
-      collection,
-      functions.sortingDocuments(documents, sortKeys),
-      searchKeys,
-      skipKeys,
-      false,
-    ),
-  };
-};
-
-module.exports = (collection, search, skip, limit, pass) => {
+module.exports = (collection, search, skip, sorting, limit, pass) => {
   const searchKeys = [];
   const skipKeys = [];
+  const sortKeys = [];
   //check param <search>
   if (search) {
     if (typeof(search) === 'object') {
@@ -93,9 +74,7 @@ module.exports = (collection, search, skip, limit, pass) => {
   //check param <limit>
   if (limit) {
     if (typeof (limit) === 'number') {
-      if (limit > 0) {
-        limitRecord = limit;
-      } else {
+      if (limit <= 0) {
         throw new Error(`The limit record parameter must be greater than 0.`);
       };
     } else {
@@ -105,55 +84,41 @@ module.exports = (collection, search, skip, limit, pass) => {
   //check param <pass>
   if (pass) {
     if (typeof (pass) === 'number') {
-      if (pass > 0) {
-        skipRecord = pass;
-      } else {
+      if (pass <= 0) {
         throw new Error(`The skip record parameter must be greater than 0.`);
       };
     } else {
       throw new Error(`The skip record parameter must be of type "Number".`);
     };
   };
-  //return
-  return {
-    sort: (sorting) => {
-      const sortKeys = [];
-      //check param <sorting>
-      if (sorting) {
-        if (typeof(sorting) === 'object') {
-          for (let field in sorting) {
-            if (collection.indexes[field]) {
-              if (sortKeys.map(item => item.key).indexOf(field) === -1) {
-                sortKeys.push({
-                  key: field,
-                  way: sorting[field] === -1 ? -1 : 1,
-                });
-              } else {
-                throw new Error(`Met a second time field "${field}".`);
-              };
-            } else {
-              throw new Error(`There is no field "${field}" in this collection.`);
-            };
+  //check param <sorting>
+  if (sorting) {
+    if (typeof (sorting) === 'object') {
+      for (let field in sorting) {
+        if (collection.indexes[field]) {
+          if (sortKeys.map(item => item.key).indexOf(field) === -1) {
+            sortKeys.push({
+              key: field,
+              way: sorting[field] === -1 ? -1 : 1,
+            });
+          } else {
+            throw new Error(`Met a second time field "${field}".`);
           };
         } else {
-          throw new Error(`The sorting parameter must be of type "Object".`);
+          throw new Error(`There is no field "${field}" in this collection.`);
         };
-      } else {
-        throw new Error(`Missing required parameter "sorting".`);
       };
-      return sort(
-        collection,
-        sortKeys,
-        searchKeys,
-        skipKeys,
-      );
-    },
-    exec: () => exec(
-      collection,
-      [],
-      searchKeys,
-      skipKeys,
-      true,
-    ),
+    } else {
+      throw new Error(`The sorting parameter must be of type "Object".`);
+    };
   };
+  //return
+  return exec(
+    collection,
+    searchKeys,
+    skipKeys,
+    sortKeys,
+    limit,
+    pass,
+  );
 };

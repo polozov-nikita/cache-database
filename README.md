@@ -22,79 +22,79 @@
 ```
   //Find all documents
   //Return Array documents
-  collection.find().exec();
+  collection.find();
 ```
 * Find params
 ```
   //Find for documents where a == 1;
   //Return Array documents
-  collection.find({a: 1}).exec();
+  collection.find({a: 1});
 
   //Find for documents where a == 1, b == 2
   //Return Array documents
-  collection.find({a: 1, b: 2}).exec();
+  collection.find({a: 1, b: 2});
 
   //Find for documents where a == 1, a == 2, a == 3
   //Return Array documents
-  collection.find({a: {$in: [1,2,3]}}).exec();
+  collection.find({a: {$in: [1,2,3]}});
 
   //Find for documents where a >= 1 and a <= 4
   //Return Array documents
-  collection.find({a: {$gte: 1, $lte:4}}).exec();
+  collection.find({a: {$gte: 1, $lte:4}});
 
   //Find for documents where a > 1 and a < 4
   //Return Array documents
-  collection.find({a: {$gt: 1, $lt:4}}).exec();
+  collection.find({a: {$gt: 1, $lt:4}});
 
   //Find all documents and skip fields b in documents
   //Return Array documents
-  collection.find({}, {b: 0}).exec();
+  collection.find({}, {b: 0});
 
   //Find all documents and sorting field a
   //Return Array documents
-  collection.find().sort({a: 1}).exec();
+  collection.find({}, {}, {a: 1});
   //AND REVERSE
-  collection.find().sort({a: -1}).exec();
+  collection.find({}, {}, {}, {a: -1});
 
   //Find for documents starting at 30 and limit output to 10 documents
   //Return Array documents
-  collection.find({}, {}, 30, 10).exec();
+  collection.find({}, {}, 30, 10);
 ```
 ### Search
 ```
   //Full-text document search
   //Return Array documents
-  collection.search('test').exec();
+  collection.search('test');
 
   //Full-text document search where a == 1
   //Return Array documents
-  collection.search('test', {a: 1}).exec();
+  collection.search('test', {a: 1});
 
   //Full-text document search where a == 1, a == 2, a == 3
   //Return Array documents
-  collection.search('test', {a: {$in: [1,2,3]}}).exec();
+  collection.search('test', {a: {$in: [1,2,3]}});
 
   //Full-text document search where a >= 1 and a <= 4
   //Return Array documents
-  collection.search('test', {a: {$gte: 1, $lte:4}}).exec();
+  collection.search('test', {a: {$gte: 1, $lte:4}});
 
   //Full-text document search where a > 1 and a < 4
   //Return Array documents
-  collection.search('test', {a: {$gt: 1, $lt:4}}).exec();
+  collection.search('test', {a: {$gt: 1, $lt:4}});
 
   //Full-text document search and skip fields b in documents
   //Return Array documents
-  collection.search('test', {}, {b: 0}).exec();
+  collection.search('test', {}, {b: 0});
 
   //Full-text document search and sorting field a
   //Return Array documents
-  collection.search('test').sort({a: 1}).exec();
+  collection.search('test', {}, {}, {a: 1});
   //AND REVERSE
-  collection.search('test').sort({a: -1}).exec();
+  collection.search('test', {}, {}, {a: -1});
 
   //Full-text document starting at 30 and limit output to 10 documents
   //Return Array documents
-  collection.search('test', {}, {}, 30, 10).exec();
+  collection.search('test', {}, {}, 30, 10);
 ```
 ### Find One
 ```
