@@ -1,5 +1,3 @@
-const FastClone = require('fastest-clone');
-
 const filterValue = require('./filter-value');
 const filterInterval = require('./filter-interval');
 const filterSample = require('./filter-sample');
@@ -49,11 +47,19 @@ module.exports = (collection, searchKeys, isUpdate = false) => {
           };
         };
         return !isUpdate
-          ? FastClone.cloneArray(searchDocs.map(item => collection.documents[item]))
+          ? searchDocs.map(item => {
+            return {
+              ...collection.documents[item],
+            };
+          })
           : searchDocs;
       } else {
         return !isUpdate
-          ? FastClone.cloneArray(documents.map(item => collection.documents[item]))
+          ? documents.map(item => {
+            return {
+              ...collection.documents[item],
+            };
+          })
           : documents;
       };
     } else {
@@ -61,7 +67,11 @@ module.exports = (collection, searchKeys, isUpdate = false) => {
     };
   } else {
     return !isUpdate
-      ? FastClone.cloneArray(collection.documents)
+      ? collection.documents.map(item => {
+        return {
+          ...item,
+        };
+      })
       : [];
   };
 };
