@@ -30,10 +30,12 @@ const addIndex = (path, collection, link) => {
         };
       };
       return collection.indexes[path].splice(search.last, 0, link);
-    } else {
+    } else if (collection.indexes[path].length) {
       return (getValueFromObj(collection.documents[collection.indexes[path][0]], path) <= getValueFromObj(collection.documents[link], path))
         ? collection.indexes[path].push(link)
         : collection.indexes[path].splice(0, 0, link);
+    } else {
+      return collection.indexes[path].push(link);
     };
   };
 };
