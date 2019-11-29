@@ -1,26 +1,31 @@
 # cache-database
 
 ## Connection
+```
   const cache = require('cache-database');
-
+```
 ## Collections
 
 ### Create
+```
   const collection = cache.create('collection');
-
+```
 ## Documents
 
 ### Create
+```
   collection.create({a: 1, b: 2, c: 3});
-
+```
 ### Find
 
 * Find all
+```
   //Find all documents
   //Return Array documents
   collection.find().exec();
-
+```
 * Find params
+```
   //Find for documents where a == 1;
   //Return Array documents
   collection.find({a: 1}).exec();
@@ -54,8 +59,9 @@
   //Find for documents starting at 30 and limit output to 10 documents
   //Return Array documents
   collection.find({}, {}, 30, 10).exec();
-
+```
 ### Search
+```
   //Full-text document search
   //Return Array documents
   collection.search('test').exec();
@@ -89,8 +95,9 @@
   //Full-text document starting at 30 and limit output to 10 documents
   //Return Array documents
   collection.search('test', {}, {}, 30, 10).exec();
-
+```
 ### Find One
+```
   //Find document where a == 1;
   //Return document
   collection.findOne({a: 1});
@@ -114,9 +121,12 @@
   //Find document and skip fields b in documents
   //Return document
   collection.find({}, {b: 0});
-
+```
 ### Update
+```
   collection.findAndUpdate({a: 1}, {x: 10});
-
+```
 ### Delete
+```
   collection.findAndDelete({a: 1});
+```
