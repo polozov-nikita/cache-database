@@ -2,30 +2,41 @@ const functions = require('../../functions');
 
 //final function
 const exec = (collection, searchKeys, skipKeys, sortKeys, limitRecord, skipRecord) => {
-  let documents = functions.find(collection, searchKeys);
-  documents = functions.sortingDocuments(documents, sortKeys)
+  const output = {
+    data: [],
+    search: searchKeys,
+    skip: skipKeys,
+    sort: sortKeys,
+    records: {
+      all: 0,
+      skip: skipRecord || null,
+      limit: limitRecord || null,
+    },
+  };
+  output.data = functions.find(collection, searchKeys);
+  output.records.all = output.data.length;
+  output.data = functions.sortingDocuments(output.data, sortKeys);
   //skip records
   if (skipRecord) {
-    if (skipRecord <= documents.length) {
-      documents = documents.slice(skipRecord, documents.length);
+    if (skipRecord <= output.data.length) {
+      output.data = output.data.slice(skipRecord, output.data.length);
     } else {
-      documents = [];
+      output.data = [];
     };
   };
   //limit
-  if (limitRecord && documents.length > limitRecord) {
-    documents = documents.slice(0, limitRecord);
+  if (limitRecord && output.data.length > limitRecord) {
+    output.data = output.data.slice(0, limitRecord);
   };
+  //skip keys
   if (skipKeys.length) {
-    for (let i = 0, lengthDocuments = documents.length; i < lengthDocuments; i++ ) {
+    for (let i = 0, lengthDocuments = output.data.length; i < lengthDocuments; i++ ) {
       for (let skip = 0, lengthSkip = skipKeys.length; skip < lengthSkip; skip++) {
-        delete documents[i][skipKeys[skip]];
+        delete output.data[i][skipKeys[skip]];
       };
     };
-    return documents;
-  } else {
-    return documents;
   };
+  return output;
 };
 
 module.exports = (collection, search, skip, sorting, limit, pass) => {

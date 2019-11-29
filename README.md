@@ -21,80 +21,302 @@
 * Find all
 ```
   //Find all documents
-  //Return Array documents
   collection.find();
+  /*
+    Return Object type:
+    {
+      data: Array,
+      search: Array,
+      skip: Array,
+      sort: Array,
+      records: {
+        all: Number,
+        skip: Number || null,
+        limit: Number || null,
+      },
+    }
+  */
+  
 ```
 * Find params
 ```
   //Find for documents where a == 1;
-  //Return Array documents
   collection.find({a: 1});
+  /*
+    Return Object type:
+    {
+      data: Array,
+      search: Array,
+      skip: Array,
+      sort: Array,
+      records: {
+        all: Number,
+        skip: Number || null,
+        limit: Number || null,
+      },
+    }
+  */
 
   //Find for documents where a == 1, b == 2
-  //Return Array documents
   collection.find({a: 1, b: 2});
+  /*
+    Return Object type:
+    {
+      data: Array,
+      search: Array,
+      skip: Array,
+      sort: Array,
+      records: {
+        all: Number,
+        skip: Number || null,
+        limit: Number || null,
+      },
+    }
+  */
 
   //Find for documents where a == 1, a == 2, a == 3
-  //Return Array documents
   collection.find({a: {$in: [1,2,3]}});
+  /*
+    Return Object type:
+    {
+      data: Array,
+      search: Array,
+      skip: Array,
+      sort: Array,
+      records: {
+        all: Number,
+        skip: Number || null,
+        limit: Number || null,
+      },
+    }
+  */
 
   //Find for documents where a >= 1 and a <= 4
-  //Return Array documents
   collection.find({a: {$gte: 1, $lte:4}});
+  /*
+    Return Object type:
+    {
+      data: Array,
+      search: Array,
+      skip: Array,
+      sort: Array,
+      records: {
+        all: Number,
+        skip: Number || null,
+        limit: Number || null,
+      },
+    }
+  */
 
   //Find for documents where a > 1 and a < 4
-  //Return Array documents
   collection.find({a: {$gt: 1, $lt:4}});
+  /*
+    Return Object type:
+    {
+      data: Array,
+      search: Array,
+      skip: Array,
+      sort: Array,
+      records: {
+        all: Number,
+        skip: Number || null,
+        limit: Number || null,
+      },
+    }
+  */
 
   //Find all documents and skip fields b in documents
-  //Return Array documents
   collection.find({}, {b: 0});
+  /*
+    Return Object type:
+    {
+      data: Array,
+      search: Array,
+      skip: Array,
+      sort: Array,
+      records: {
+        all: Number,
+        skip: Number || null,
+        limit: Number || null,
+      },
+    }
+  */
 
   //Find all documents and sorting field a
-  //Return Array documents
   collection.find({}, {}, {a: 1});
   //AND REVERSE
   collection.find({}, {}, {}, {a: -1});
+  /*
+    Return Object type:
+    {
+      data: Array,
+      search: Array,
+      skip: Array,
+      sort: Array,
+      records: {
+        all: Number,
+        skip: Number || null,
+        limit: Number || null,
+      },
+    }
+  */
 
   //Find for documents starting at 30 and limit output to 10 documents
-  //Return Array documents
   collection.find({}, {}, 30, 10);
+  /*
+    Return Object type:
+    {
+      data: Array,
+      search: Array,
+      skip: Array,
+      sort: Array,
+      records: {
+        all: Number,
+        skip: Number || null,
+        limit: Number || null,
+      },
+    }
+  */
 ```
 ### Search
 ```
   //Full-text document search
-  //Return Array documents
   collection.search('test');
+  /*
+    Return Object type:
+    {
+      data: Array,
+      search: Array,
+      skip: Array,
+      sort: Array,
+      records: {
+        all: Number,
+        skip: Number || null,
+        limit: Number || null,
+      },
+    }
+  */
 
   //Full-text document search where a == 1
-  //Return Array documents
   collection.search('test', {a: 1});
+  /*
+    Return Object type:
+    {
+      data: Array,
+      search: Array,
+      skip: Array,
+      sort: Array,
+      records: {
+        all: Number,
+        skip: Number || null,
+        limit: Number || null,
+      },
+    }
+  */
 
   //Full-text document search where a == 1, a == 2, a == 3
-  //Return Array documents
   collection.search('test', {a: {$in: [1,2,3]}});
+  /*
+    Return Object type:
+    {
+      data: Array,
+      search: Array,
+      skip: Array,
+      sort: Array,
+      records: {
+        all: Number,
+        skip: Number || null,
+        limit: Number || null,
+      },
+    }
+  */
 
   //Full-text document search where a >= 1 and a <= 4
-  //Return Array documents
   collection.search('test', {a: {$gte: 1, $lte:4}});
+  /*
+    Return Object type:
+    {
+      data: Array,
+      search: Array,
+      skip: Array,
+      sort: Array,
+      records: {
+        all: Number,
+        skip: Number || null,
+        limit: Number || null,
+      },
+    }
+  */
 
   //Full-text document search where a > 1 and a < 4
-  //Return Array documents
   collection.search('test', {a: {$gt: 1, $lt:4}});
+  /*
+    Return Object type:
+    {
+      data: Array,
+      search: Array,
+      skip: Array,
+      sort: Array,
+      records: {
+        all: Number,
+        skip: Number || null,
+        limit: Number || null,
+      },
+    }
+  */
 
   //Full-text document search and skip fields b in documents
-  //Return Array documents
   collection.search('test', {}, {b: 0});
+  /*
+    Return Object type:
+    {
+      data: Array,
+      search: Array,
+      skip: Array,
+      sort: Array,
+      records: {
+        all: Number,
+        skip: Number || null,
+        limit: Number || null,
+      },
+    }
+  */
 
   //Full-text document search and sorting field a
-  //Return Array documents
   collection.search('test', {}, {}, {a: 1});
   //AND REVERSE
   collection.search('test', {}, {}, {a: -1});
+  /*
+    Return Object type:
+    {
+      data: Array,
+      search: Array,
+      skip: Array,
+      sort: Array,
+      records: {
+        all: Number,
+        skip: Number || null,
+        limit: Number || null,
+      },
+    }
+  */
 
   //Full-text document starting at 30 and limit output to 10 documents
-  //Return Array documents
   collection.search('test', {}, {}, 30, 10);
+  /*
+    Return Object type:
+    {
+      data: Array,
+      search: Array,
+      skip: Array,
+      sort: Array,
+      records: {
+        all: Number,
+        skip: Number || null,
+        limit: Number || null,
+      },
+    }
+  */
 ```
 ### Find One
 ```
