@@ -1,6 +1,12 @@
 const getValueFromObj = require('./get-value-from-obj');
 
 const compare = (a, b, reverse = false) => {
+  if (a === null || a === undefined || a === NaN) {
+    a = '';
+  };
+  if (b === null || b === undefined || b === NaN) {
+    b = '';
+  };
   if (a < b) {
     return reverse ? 1 : -1;
   } else if (a > b) {
