@@ -5,13 +5,14 @@ const exec = (collection, searchKeys) => {
   const documents = functions.find(collection, searchKeys, true);
   for (let i = 0, length = documents.length; i < length; i++) {
     //delete on collection
-    collection.documents[documents[i]] = null;
+    collection.documents.splice(documents[i], 1);
     //delete on indexes
     for (let field in collection.indexes) {
       let key = collection.indexes[field].indexOf(documents[i]);
       if (key !== -1) {
         collection.indexes[field].splice(key, 1);
       };
+      collection.indexes[field] = collection.indexes[field].map(item => item >= documents[i] ? item - 1 : item);
     };
   };
   return;

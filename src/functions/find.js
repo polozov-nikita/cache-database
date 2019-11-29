@@ -1,3 +1,5 @@
+const FastClone = require('fastest-clone');
+
 const filterValue = require('./filter-value');
 const filterInterval = require('./filter-interval');
 const filterSample = require('./filter-sample');
@@ -32,8 +34,8 @@ module.exports = (collection, searchKeys, isUpdate = false) => {
       };
     };
     if (!interruptLabel) {
-      const searchDocs = [];
       if (searchKeys.length > 1) {
+        const searchDocs = [];
         for (let i = 0, lengthDocuments = documents.length; i < lengthDocuments; i++) {
           let check = true;
           for (let search = 0, lengthSearch = searchKeys.length; search < lengthSearch; search++) {
@@ -43,32 +45,23 @@ module.exports = (collection, searchKeys, isUpdate = false) => {
             };
           };
           if (check) {
-            if (!isUpdate) {
-              searchDocs.push(Object.assign({}, collection.documents[documents[i]]));
-            } else {
-              searchDocs.push(documents[i]);
-            };
-          };
-        };
-        return searchDocs;
-      } else {
-        for (let i = 0, lengthDocuments = documents.length; i < lengthDocuments; i++) {
-          if (!isUpdate) {
-            searchDocs.push(Object.assign({}, collection.documents[documents[i]]));
-          } else {
             searchDocs.push(documents[i]);
           };
         };
-        return searchDocs;
+        return !isUpdate
+          ? FastClone.cloneArray(searchDocs.map(item => collection.documents[item]))
+          : searchDocs;
+      } else {
+        return !isUpdate
+          ? FastClone.cloneArray(documents.map(item => collection.documents[item]))
+          : documents;
       };
     } else {
       return [];
     };
   } else {
     return !isUpdate
-      ? collection.documents
-        .filter(item => item !== null)
-        .map(item => Object.assign({}, item))
+      ? FastClone.cloneArray(collection.documents)
       : [];
   };
 };
