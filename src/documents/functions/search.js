@@ -1,32 +1,5 @@
 const functions = require('../../functions');
 
-//convert document
-const convert = (document) => {
-  let param = '';
-  for (let field in document) {
-    switch (typeof document[field]) {
-      case 'object':
-        param += convert(document[field]);
-        param += ' ';
-        break;
-      case 'number':
-        param += String(document[field]);
-        param += ' ';
-        break;
-      case 'string':
-        param += String(document[field]).toLowerCase();
-        param += ' ';
-        break;
-    };
-  };
-  return param;
-};
-
-//find documents
-const find = (documents, search) => {
-  return documents.filter(item => convert(item).includes(search));
-};
-
 //final function
 const exec = (collection, search, searchKeys, skipKeys, sortKeys, limitRecord, skipRecord) => {
   return new Promise((resolve, reject) => {
@@ -41,38 +14,35 @@ const exec = (collection, search, searchKeys, skipKeys, sortKeys, limitRecord, s
         limit: limitRecord || null,
       },
     };
+    //find documents
     functions.find(collection, searchKeys)
-    .then(data => {
-      output.data = data;
-      output.data = find(output.data, search);
-      output.records.all = output.data.length;
-      return functions.sortingDocuments(output.data, sortKeys);
-    })
-    .then(data => {
-      output.data = data;
-      //skip records
-      if (skipRecord) {
-        if (skipRecord <= output.data.length) {
-          output.data = output.data.slice(skipRecord, output.data.length);
-        } else {
-          output.data = [];
-        };
-      };
-      //limit
-      if (limitRecord && output.data.length > limitRecord) {
-        output.data = output.data.slice(0, limitRecord);
-      };
-      //skip keys
-      if (skipKeys.length) {
-        for (let i = 0, lengthDocuments = output.data.length; i < lengthDocuments; i++ ) {
-          for (let skip = 0, lengthSkip = skipKeys.length; skip < lengthSkip; skip++) {
-            delete output.data[i][skipKeys[skip]];
+      .then(data => functions.filterTextFull(data, search))
+      .then(data => {
+        output.records.all = data.length;
+        //sorting documents
+        return functions.sortingDocuments(data, sortKeys);
+      })
+      .then(data => {
+        //skip records
+        if (skipRecord) {
+          if (skipRecord <= data.length - 1) {
+            data = data.slice(skipRecord, data.length);
+          } else {
+            data = [];
           };
         };
-      };
-      resolve(output);
-    })
-    .catch(error => reject(error));
+        //limit
+        if (limitRecord && data.length > limitRecord) {
+          data = data.slice(0, limitRecord);
+        };
+        //skip keys
+        return functions.skipKeys(data, skipKeys);
+      })
+      .then(data => {
+        output.data = data;
+        resolve(output);
+      })
+      .catch(error => reject(error));
   });
 };
 

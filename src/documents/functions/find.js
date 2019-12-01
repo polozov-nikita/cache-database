@@ -14,34 +14,31 @@ const exec = (collection, searchKeys, skipKeys, sortKeys, limitRecord, skipRecor
         limit: limitRecord || null,
       },
     };
+    //find documents
     functions.find(collection, searchKeys)
       .then(data => {
-        output.data = data;
-        output.records.all = output.data.length;
-        return functions.sortingDocuments(output.data, sortKeys);
+        output.records.all = data.length;
+        //sorting documents
+        return functions.sortingDocuments(data, sortKeys);
       })
       .then(data => {
-        output.data = data;
         //skip records
         if (skipRecord) {
-          if (skipRecord <= output.data.length) {
-            output.data = output.data.slice(skipRecord, output.data.length);
+          if (skipRecord <= data.length - 1) {
+            data = data.slice(skipRecord, data.length);
           } else {
-            output.data = [];
+            data = [];
           };
         };
         //limit
-        if (limitRecord && output.data.length > limitRecord) {
-          output.data = output.data.slice(0, limitRecord);
+        if (limitRecord && data.length > limitRecord) {
+          data = data.slice(0, limitRecord);
         };
         //skip keys
-        if (skipKeys.length) {
-          for (let i = 0, lengthDocuments = output.data.length; i < lengthDocuments; i++) {
-            for (let skip = 0, lengthSkip = skipKeys.length; skip < lengthSkip; skip++) {
-              delete output.data[i][skipKeys[skip]];
-            };
-          };
-        };
+        return functions.skipKeys(data, skipKeys);
+      })
+      .then(data => {
+        output.data = data;
         resolve(output);
       })
       .catch(error => reject(error));
