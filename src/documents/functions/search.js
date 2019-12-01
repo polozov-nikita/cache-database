@@ -29,24 +29,27 @@ const find = (documents, search) => {
 
 //final function
 const exec = (collection, search, searchKeys, skipKeys, sortKeys, limitRecord, skipRecord) => {
-  const output = {
-    data: [],
-    search: searchKeys,
-    skip: skipKeys,
-    sort: sortKeys,
-    records: {
-      all: 0,
-      skip: skipRecord || null,
-      limit: limitRecord || null,
-    },
-  };
   return new Promise((resolve, reject) => {
+    const output = {
+      data: [],
+      search: searchKeys,
+      skip: skipKeys,
+      sort: sortKeys,
+      records: {
+        all: 0,
+        skip: skipRecord || null,
+        limit: limitRecord || null,
+      },
+    };
     functions.find(collection, searchKeys)
     .then(data => {
       output.data = data;
       output.data = find(output.data, search);
       output.records.all = output.data.length;
-      output.data = functions.sortingDocuments(output.data, sortKeys);
+      return functions.sortingDocuments(output.data, sortKeys);
+    })
+    .then(data => {
+      output.data = data;
       //skip records
       if (skipRecord) {
         if (skipRecord <= output.data.length) {
