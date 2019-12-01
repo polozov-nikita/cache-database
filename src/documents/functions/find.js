@@ -14,12 +14,17 @@ const exec = (collection, searchKeys, skipKeys, sortKeys, limitRecord, skipRecor
     },
   };
   return new Promise((resolve, reject) => {
-    functions.workers(global.cachedbSource + '/src/functions/find.js', {collection: collection, searchKeys: searchKeys})
+    console.time('_find');
+    functions.find(collection, searchKeys)
       .then(data => {
+        console.timeEnd('_find');
         output.data = data;
         output.records.all = output.data.length;
+        console.time('_sort');
         output.data = functions.sortingDocuments(output.data, sortKeys);
+        console.timeEnd('_sort');
         //skip records
+        console.time('_skipRecord');
         if (skipRecord) {
           if (skipRecord <= output.data.length) {
             output.data = output.data.slice(skipRecord, output.data.length);
@@ -27,11 +32,15 @@ const exec = (collection, searchKeys, skipKeys, sortKeys, limitRecord, skipRecor
             output.data = [];
           };
         };
+        console.timeEnd('_skipRecord');
         //limit
+        console.time('_limitRecord');
         if (limitRecord && output.data.length > limitRecord) {
           output.data = output.data.slice(0, limitRecord);
         };
+        console.timeEnd('_limitRecord');
         //skip keys
+        console.time('_skipKeys');
         if (skipKeys.length) {
           for (let i = 0, lengthDocuments = output.data.length; i < lengthDocuments; i++) {
             for (let skip = 0, lengthSkip = skipKeys.length; skip < lengthSkip; skip++) {
@@ -39,6 +48,7 @@ const exec = (collection, searchKeys, skipKeys, sortKeys, limitRecord, skipRecor
             };
           };
         };
+        console.timeEnd('_skipKeys');
         resolve(output);
       })
       .catch(error => reject(error));

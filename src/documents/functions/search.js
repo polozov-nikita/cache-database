@@ -41,7 +41,7 @@ const exec = (collection, search, searchKeys, skipKeys, sortKeys, limitRecord, s
     },
   };
   return new Promise((resolve, reject) => {
-    functions.workers(global.cachedbSource + '/src/functions/find.js', {collection: collection, searchKeys: searchKeys})
+    functions.find(collection, searchKeys)
     .then(data => {
       output.data = data;
       output.data = find(output.data, search);

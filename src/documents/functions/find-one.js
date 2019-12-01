@@ -3,7 +3,7 @@ const functions = require('../../functions');
 //final function
 const exec = (collection, searchKeys, skipKeys) => {
   return new Promise((resolve, reject) => {
-    functions.workers(global.cachedbSource + '/src/functions/find.js', {collection: collection, searchKeys: searchKeys})
+    functions.find(collection, searchKeys)
       .then(documents => {
         const document = documents.length ? documents[0] : null;
         //skip keys

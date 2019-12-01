@@ -3,7 +3,7 @@ const functions = require('../../functions');
 //final function
 const exec = (collection, searchKeys) => {
   return new Promise((resolve, reject) => {
-    functions.workers(global.cachedbSource + '/src/functions/find.js', {collection: collection, searchKeys: searchKeys, isUpdate: true})
+    functions.find(collection, searchKeys, true)
       .then(documents => {
         for (let i = 0, length = documents.length; i < length; i++) {
           //delete on collection
