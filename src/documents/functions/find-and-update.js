@@ -2,25 +2,30 @@ const functions = require('../../functions');
 
 //final function
 const exec = (collection, searchKeys, document) => {
-  const documents = functions.find(collection, searchKeys, true);
-  for (let i = 0, length = documents.length; i < length; i++) {
-    const _document = {
-      ...collection.documents[documents[i]],
-      ...document,
-    };
-    //delete on indexes
-    for (let field in collection.indexes) {
-      let key = collection.indexes[field].indexOf(documents[i]);
-      if (key !== -1) {
-        collection.indexes[field].splice(key, 1);
-      };
-    };
-    //insert update document
-    collection.documents[documents[i]] = _document;
-    //created indexes
-    functions.addIndexes(collection, documents[i]);
-  };
-  return;
+  return new Promise((resolve, reject) => {
+    functions.workers(global.cachedbSource + '/src/functions/find.js', {collection: collection, searchKeys: searchKeys, isUpdate: true})
+      .then(documents => {
+        for (let i = 0, length = documents.length; i < length; i++) {
+          const _document = {
+            ...collection.documents[documents[i]],
+            ...document,
+          };
+          //delete on indexes
+          for (let field in collection.indexes) {
+            let key = collection.indexes[field].indexOf(documents[i]);
+            if (key !== -1) {
+              collection.indexes[field].splice(key, 1);
+            };
+          };
+          //insert update document
+          collection.documents[documents[i]] = _document;
+          //created indexes
+          functions.addIndexes(collection, documents[i]);
+        };
+        resolve(true);
+      })
+      .catch(error => reject(error));
+  });
 };
 
 module.exports = (collection, search, document) => {

@@ -13,30 +13,36 @@ const exec = (collection, searchKeys, skipKeys, sortKeys, limitRecord, skipRecor
       limit: limitRecord || null,
     },
   };
-  output.data = functions.find(collection, searchKeys);
-  output.records.all = output.data.length;
-  output.data = functions.sortingDocuments(output.data, sortKeys);
-  //skip records
-  if (skipRecord) {
-    if (skipRecord <= output.data.length) {
-      output.data = output.data.slice(skipRecord, output.data.length);
-    } else {
-      output.data = [];
-    };
-  };
-  //limit
-  if (limitRecord && output.data.length > limitRecord) {
-    output.data = output.data.slice(0, limitRecord);
-  };
-  //skip keys
-  if (skipKeys.length) {
-    for (let i = 0, lengthDocuments = output.data.length; i < lengthDocuments; i++ ) {
-      for (let skip = 0, lengthSkip = skipKeys.length; skip < lengthSkip; skip++) {
-        delete output.data[i][skipKeys[skip]];
-      };
-    };
-  };
-  return output;
+  return new Promise((resolve, reject) => {
+    functions.workers(global.cachedbSource + '/src/functions/find.js', {collection: collection, searchKeys: searchKeys})
+      .then(data => {
+        output.data = data;
+        output.records.all = output.data.length;
+        output.data = functions.sortingDocuments(output.data, sortKeys);
+        //skip records
+        if (skipRecord) {
+          if (skipRecord <= output.data.length) {
+            output.data = output.data.slice(skipRecord, output.data.length);
+          } else {
+            output.data = [];
+          };
+        };
+        //limit
+        if (limitRecord && output.data.length > limitRecord) {
+          output.data = output.data.slice(0, limitRecord);
+        };
+        //skip keys
+        if (skipKeys.length) {
+          for (let i = 0, lengthDocuments = output.data.length; i < lengthDocuments; i++) {
+            for (let skip = 0, lengthSkip = skipKeys.length; skip < lengthSkip; skip++) {
+              delete output.data[i][skipKeys[skip]];
+            };
+          };
+        };
+        resolve(output);
+      })
+      .catch(error => reject(error));
+  });
 };
 
 module.exports = (collection, search, skip, sorting, limit, pass) => {

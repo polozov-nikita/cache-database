@@ -2,21 +2,26 @@ const functions = require('../../functions');
 
 //final function
 const exec = (collection, searchKeys, skipKeys) => {
-  const documents = functions.find(collection, searchKeys);
-  const document = documents.length ? documents[0] : null;
-  //skip keys
-  if (document) {
-    if (skipKeys.length) {
-      for (let skip = 0, lengthSkip = skipKeys.length; skip < lengthSkip; skip++) {
-        delete document[skipKeys[skip]];
-      };
-      return document;
-    } else {
-      return document;
-    };
-  } else {
-    return null;
-  };
+  return new Promise((resolve, reject) => {
+    functions.workers(global.cachedbSource + '/src/functions/find.js', {collection: collection, searchKeys: searchKeys})
+      .then(documents => {
+        const document = documents.length ? documents[0] : null;
+        //skip keys
+        if (document) {
+          if (skipKeys.length) {
+            for (let skip = 0, lengthSkip = skipKeys.length; skip < lengthSkip; skip++) {
+              delete document[skipKeys[skip]];
+            };
+            resolve(document);
+          } else {
+            resolve(document);
+          };
+        } else {
+          resolve(null);
+        };
+      })
+      .catch(error => reject(error));
+  });
 };
 
 module.exports = (collection, search, skip) => {

@@ -6,8 +6,9 @@ for (let i = 0; i < 20; i++) {
   collection.create({a: i, b: 'test'});
 };
 
-console.log(collection.find());
-console.log('----DELETE----');
-collection.findAndDelete({a: 0});
-collection.findAndDelete({a: 1});
-console.log(collection.find());
+collection.findAndDelete({a: 0})
+  .then(() => collection.find())
+  .then(data => console.log(data.data))
+  .catch(error => {
+    throw new Error(error)
+  });
