@@ -29,25 +29,17 @@ const convert = (data, input) => {
   return output;
 };
 
-module.exports = (collection, key, search) =>
-  collection.indexes[key].filter(item => {
-    if (collection.documents[item]) {
-      const value = getValueFromObj(collection.documents[item], key);
-      let output = true;
-      if (search.$gte && convert(value, search.$gte) < search.$gte) {
-        output = false;
-      };
-      if (search.$gt && convert(value, search.$gt) <= search.$gt) {
-        output = false;
-      };
-      if (search.$lte && convert(value, search.$lte) > search.$lte) {
-        output = false;
-      };
-      if (search.$lt && convert(value, search.$lt) >= search.$lt) {
-        output = false;
-      };
-      return output;
-    } else {
-      return false;
-    };
+module.exports = (collection, key, search) => {
+  return collection.indexes[key].filter(item => {
+    const value = getValueFromObj(collection.documents[item], key);
+    return !(
+      ((search.$gte !== null) && (search.$gte !== undefined) && (convert(value, search.$gte) < search.$gte))
+      ||
+      ((search.$gt !== null) && (search.$gt !== undefined) && (convert(value, search.$gt) <= search.$gt))
+      ||
+      ((search.$lte !== null) && (search.$lte !== undefined) && (convert(value, search.$lte) > search.$lte))
+      ||
+      ((search.$lt !== null) && (search.$lt !== undefined) && (convert(value, search.$lt) >= search.$lt))
+    );
   });
+};
