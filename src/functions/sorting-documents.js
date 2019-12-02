@@ -23,8 +23,8 @@ const compare = (a, b, reverse = false) => {
  * @field {Object} document - документ.
  * @field {Object} itemSorting - правило сортировки. Пример {key: 'id', way: 1}. Где key -> название сортируемого поля. way -> направление сортировки: 1 -> от меньшего к большему, -1 -> от большего к меньшему. По-умолчанию key = 1. 
  */
-module.exports = (documents = [], sorting = []) => {
-  return new Promise((resolve, reject) => {
+module.exports = (documents = [], sorting = []) =>
+  new Promise((resolve, reject) => {
     let output = documents;
     for (let sort = 0, length = sorting.length; sort < length; sort++) {
       if (sort === 0) {
@@ -59,4 +59,3 @@ module.exports = (documents = [], sorting = []) => {
     };
     resolve(output);
   });
-};

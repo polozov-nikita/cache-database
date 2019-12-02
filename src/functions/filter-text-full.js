@@ -20,14 +20,13 @@ const convert = (document) => {
   return param;
 };
 
-module.exports = (documents, search) => {
-  return new Promise((resolve, reject) => {
+module.exports = (documents, search) =>
+  new Promise((resolve, reject) =>
     resolve(
       documents
         .filter(item =>
           convert(item)
             .includes(search)
         )
-    );
-  });
-};
+    )
+  );

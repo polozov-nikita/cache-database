@@ -1,10 +1,12 @@
 const functions = require('../../functions');
 
 //final function
-const exec = (collection, document) => {
-  const length = collection.documents.push(document);
-  return functions.addIndexes(collection, length - 1);
-};
+const exec = (collection, document) =>
+  new Promise((resolve, reject) => {
+    const length = collection.documents.push(document);
+    functions.addIndexes(collection, length - 1);
+    resolve(true);
+  });
 
 module.exports = (collection, document) => {
   //check param <document>

@@ -1,8 +1,8 @@
 const functions = require('../../functions');
 
 //final function
-const exec = (collection, searchKeys, document) => {
-  return new Promise((resolve, reject) => {
+const exec = (collection, searchKeys, document) =>
+  new Promise((resolve, reject) =>
     functions.find(collection, searchKeys, true)
       .then(documents => {
         for (let i = 0, length = documents.length; i < length; i++) {
@@ -24,9 +24,8 @@ const exec = (collection, searchKeys, document) => {
         };
         resolve(true);
       })
-      .catch(error => reject(error));
-  });
-};
+      .catch(error => reject(error))
+  );
 
 module.exports = (collection, search, document) => {
   const searchKeys = [];

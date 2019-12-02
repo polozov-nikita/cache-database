@@ -1,8 +1,8 @@
 const functions = require('../../functions');
 
 //final function
-const exec = (collection, search, searchKeys, skipKeys, sortKeys, limitRecord, skipRecord) => {
-  return new Promise((resolve, reject) => {
+const exec = (collection, search, searchKeys, skipKeys, sortKeys, limitRecord, skipRecord) =>
+  new Promise((resolve, reject) => {
     const output = {
       data: [],
       search: searchKeys,
@@ -44,7 +44,6 @@ const exec = (collection, search, searchKeys, skipKeys, sortKeys, limitRecord, s
       })
       .catch(error => reject(error));
   });
-};
 
 module.exports = (collection, textFullSearch, search, skip, sorting, limit, pass) => {
   let searchParam;

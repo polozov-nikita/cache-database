@@ -3,8 +3,8 @@ const filterInterval = require('./filter-interval');
 const filterSample = require('./filter-sample');
 const getValueFromObj = require('./get-value-from-obj');
 
-module.exports = (collection, searchKeys, isUpdate = false) => {
-  return new Promise((resolve, reject) => {
+module.exports = (collection, searchKeys, isUpdate = false) =>
+  new Promise((resolve, reject) => {
     if (searchKeys.length) {
       let documents = null;
       let interruptLabel = false;
@@ -79,4 +79,3 @@ module.exports = (collection, searchKeys, isUpdate = false) => {
       );
     };
   });
-};

@@ -14,7 +14,10 @@
 
 ### Create
 ```
-  collection.create({a: 1, b: 2, c: 3});
+  //Return Promise.
+  collection.create({a: 1, b: 2, c: 3})
+    .then(() => console.log('ok'))
+    .catch(error => console.log(error))
 ```
 ### Find
 

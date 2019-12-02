@@ -29,8 +29,8 @@ const convert = (data, input) => {
   return output;
 };
 
-module.exports = (collection, key, search) => {
-  return collection.indexes[key].filter(item => {
+module.exports = (collection, key, search) =>
+  collection.indexes[key].filter(item => {
     if (collection.documents[item]) {
       const value = getValueFromObj(collection.documents[item], key);
       let output = true;
@@ -51,4 +51,3 @@ module.exports = (collection, key, search) => {
       return false;
     };
   });
-};

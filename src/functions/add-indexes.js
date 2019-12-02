@@ -48,10 +48,6 @@ const checkIndex = (path, collection) => {
   };
 };
 
-const createIndex = (path, collection) => {
-  return collection.indexes[path] = [];
-};
+const createIndex = (path, collection) => collection.indexes[path] = [];
 
-module.exports = (collection, link) => {
-  return addIndexes('', collection, link, collection.documents[link]);
-};
+module.exports = (collection, link) => addIndexes('', collection, link, collection.documents[link]);
