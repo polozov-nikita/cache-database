@@ -51,14 +51,10 @@ module.exports = (collection, search, skip) => {
   if (skip) {
     if (typeof(skip) === 'object') {
       for (let field in skip) {
-        if (collection.indexes[field]) {
-          if (skipKeys.indexOf(field) === -1) {
-            skipKeys.push(field);
-          } else {
-            throw new Error(`Met a second time field "${field}".`);
-          };
+        if (skipKeys.indexOf(field) === -1) {
+          skipKeys.push(field);
         } else {
-          throw new Error(`There is no field "${field}" in this collection.`);
+          throw new Error(`Met a second time field "${field}".`);
         };
       };
     } else {
