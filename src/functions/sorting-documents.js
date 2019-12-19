@@ -38,9 +38,11 @@ module.exports = (documents = [], sorting = []) =>
         let startCrop = 0;
         //создание массивов для сортировки n-го уровня
         for (let i = 1, lengthOutput = output.length; i < lengthOutput; i++) {
-          if (getValueFromObj(output[i], sorting[sort - 1].key) !== getValueFromObj(output[i - 1], sorting[sort - 1].key) || i === lengthOutput - 1) {
+          if (getValueFromObj(output[i], sorting[sort - 1].key) !== getValueFromObj(output[i - 1], sorting[sort - 1].key) && i !== lengthOutput - 1) {
             store.push(output.slice(startCrop, i));
             startCrop = i;
+          } else if (i === lengthOutput - 1) {
+            store.push(output.slice(startCrop));
           } else {
             continue;
           };

@@ -1,33 +1,5 @@
 const getValueFromObj = require('./get-value-from-obj');
-
-const convert = (data, input) => {
-  const type = typeof input;
-  let output = data;
-  switch (type) {
-    case 'number':
-      if (!isNaN(+data)) {
-        output = Number(data);
-      };
-      break;
-    case 'string':
-      output = String(data);
-      break;
-    case 'boolean':
-      output = Boolean(data);
-      break;
-    case 'object':
-      if (!isNaN(Date.parse(data))) {
-        output = new Date(data);
-      } else {
-        output = data;
-      };
-      break;
-    default:
-      output = data;
-      break;
-  };
-  return output;
-};
+const convert = require('./convert');
 
 module.exports = (collection, key, search) => {
   return collection.indexes[key].filter(item => {
