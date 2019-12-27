@@ -6,6 +6,7 @@ const getValueFromObj = require('./get-value-from-obj');
 module.exports = (collection, searchKeys, isUpdate = false) =>
   new Promise((resolve, reject) => {
     if (searchKeys.length) {
+      const ranges = {};
       let documents = null;
       let interruptLabel = false;
       for (let search = 0, lengthSearch = searchKeys.length; search < lengthSearch; search++) {
@@ -22,6 +23,7 @@ module.exports = (collection, searchKeys, isUpdate = false) =>
             range = filterValue(collection, searchKeys[search].key, searchKeys[search].value);
           };
         };
+        ranges[searchKeys[search].key] = range;
         if (range.length) {
           if (!documents || range.length < documents.length) {
             documents = range;
@@ -38,7 +40,7 @@ module.exports = (collection, searchKeys, isUpdate = false) =>
           for (let i = 0, lengthDocuments = documents.length; i < lengthDocuments; i++) {
             let check = true;
             for (let search = 0, lengthSearch = searchKeys.length; search < lengthSearch; search++) {
-              if (getValueFromObj(collection.documents[documents[i]], searchKeys[search].key) !== searchKeys[search].value) {
+              if (!ranges[searchKeys[search].key].includes(documents[i])) {
                 check = false;
                 break;
               };
