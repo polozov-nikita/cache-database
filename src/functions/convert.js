@@ -15,7 +15,7 @@ module.exports = (data, input) => {
       break;
     case 'object':
       if (!isNaN(Date.parse(data))) {
-        output = new Date(data);
+        output = new Date(data).getTime();
       };
       break;
   };

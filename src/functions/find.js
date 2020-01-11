@@ -1,7 +1,6 @@
 const filterValue = require('./filter-value');
 const filterInterval = require('./filter-interval');
 const filterSample = require('./filter-sample');
-const getValueFromObj = require('./get-value-from-obj');
 
 module.exports = (collection, searchKeys, isUpdate = false) =>
   new Promise((resolve, reject) => {
@@ -10,9 +9,8 @@ module.exports = (collection, searchKeys, isUpdate = false) =>
       let documents = null;
       let interruptLabel = false;
       for (let search = 0, lengthSearch = searchKeys.length; search < lengthSearch; search++) {
-        const typeSearchValue = typeof searchKeys[search].value;
         let range;
-        if (typeSearchValue !== 'object') {
+        if (typeof searchKeys[search].value !== 'object') {
           range = filterValue(collection, searchKeys[search].key, searchKeys[search].value);
         } else {
           if (searchKeys[search].value.hasOwnProperty('$gte') || searchKeys[search].value.hasOwnProperty('$lte') || searchKeys[search].value.hasOwnProperty('$gt') || searchKeys[search].value.hasOwnProperty('$lt')) {

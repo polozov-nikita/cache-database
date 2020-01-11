@@ -1,5 +1,5 @@
 //convert document
-const convert = (document) => {
+const convert = document => {
   let param = '';
   for (let field in document) {
     switch (typeof document[field]) {
