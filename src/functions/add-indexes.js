@@ -2,7 +2,7 @@ const getValueFromObj = require('./get-value-from-obj');
 
 const addIndexes = (path, collection, link, document) => {
   for (let field in document) {
-    if (typeof document[field] !== 'object') {
+    if (typeof document[field] !== 'object' || document[field] === null) {
       addIndex((path === '') ? field : `${path}.${field}`, collection, link);
     } else {
       addIndexes((path === '') ? field : `${path}.${field}`, collection, link, document[field]);

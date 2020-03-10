@@ -10,12 +10,10 @@ module.exports = (collection, searchKeys, isUpdate = false) =>
       let interruptLabel = false;
       for (let search = 0, lengthSearch = searchKeys.length; search < lengthSearch; search++) {
         let range;
-        if (typeof searchKeys[search].value !== 'object') {
+        if (typeof searchKeys[search].value !== 'object' || searchKeys[search].value === null) {
           range = filterValue(collection, searchKeys[search].key, searchKeys[search].value);
         } else {
-          if (searchKeys[search].value === null) {
-            range = filterValue(collection, searchKeys[search].key, searchKeys[search].value);
-          } else if (searchKeys[search].value.hasOwnProperty('$gte') || searchKeys[search].value.hasOwnProperty('$lte') || searchKeys[search].value.hasOwnProperty('$gt') || searchKeys[search].value.hasOwnProperty('$lt')) {
+            if (searchKeys[search].value.hasOwnProperty('$gte') || searchKeys[search].value.hasOwnProperty('$lte') || searchKeys[search].value.hasOwnProperty('$gt') || searchKeys[search].value.hasOwnProperty('$lt')) {
             range = filterInterval(collection, searchKeys[search].key, searchKeys[search].value);
           } else if (searchKeys[search].value.hasOwnProperty('$in') && Array.isArray(searchKeys[search].value.$in)) {
             range = filterSample(collection, searchKeys[search].key, searchKeys[search].value);
