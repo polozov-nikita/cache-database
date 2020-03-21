@@ -1,4 +1,4 @@
-const functions = require('../documents/functions');
+const functions = require('./functions');
 
 class Collection {
 	constructor(name, refStorage) {
