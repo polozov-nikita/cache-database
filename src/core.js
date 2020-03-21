@@ -5,9 +5,12 @@ class CacheDb {
   constructor() {};
 
   /**
-   * @param {string} name - collection name
+   * collection creation.
    * 
-   * @return {Collection} collection Cache DB
+   * @param {string} name - collection name.
+   * 
+   * @return {Collection} collection Cache DB.
+   * 
    */
   create(name) {
     if (name && typeof name === 'string') {
